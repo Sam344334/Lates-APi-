@@ -11,15 +11,10 @@ app = Flask(__name__)
 CORS(app)
 
 # Configuration
-API_KEY = os.environ.get('API_KEY')
+API_KEY = os.environ.get('sk-J9vDDHyPZfXCCf9CLNNMpnDdayVDnEDQ7AQ44siKoIu3PsaS')
 FAST_BASE_URL = 'https://fast.typegpt.net/v1/chat/completions'
 PUTER_BASE_URL = 'https://api.puter.com/chat'
 VALID_MODELS = ['deepseek-r1', 'gpt-4o', 'claude']
-
-# Add this new route for the home page
-@app.route('/', methods=['GET'])
-def home():
-    return render_template('home.html', models=VALID_MODELS)
 
 def call_fast_typegpt(prompt, model):
     headers = {
@@ -29,7 +24,7 @@ def call_fast_typegpt(prompt, model):
     payload = {
         'model': model,
         'messages': [{'role': 'user', 'content': prompt}],
-        'max_tokens': 50
+        'max_tokens': 4096  # Increased from 50 to 4096
     }
     try:
         response = requests.post(FAST_BASE_URL, json=payload, headers=headers)
