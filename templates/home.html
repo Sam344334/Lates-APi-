@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        code {
+            background-color: #e0e0e0;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .endpoint {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to AI Chat API</h1>
+    
+    <div class="container">
+        <h2>API Base URL:</h2>
+        <code>{{ request.host_url }}</code>
+    </div>
+
+    <div class="container">
+        <h2>Available Models:</h2>
+        <ul>
+            {% for model in models %}
+            <li><code>{{ model }}</code></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>API Endpoints:</h2>
+        
+        <div class="endpoint">
+            <h3>Chat Completion</h3>
+            <p><strong>POST</strong> <code>/api/chat</code></p>
+            <p>Request body example:</p>
+            <pre>
+{
+    "prompt": "Your message here",
+    "model": "deepseek-r1"
+}
+            </pre>
+        </div>
+
+        <div class="endpoint">
+            <h3>Health Check</h3>
+            <p><strong>GET</strong> <code>/health</code></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Example Usage:</h2>
+        <pre>
+curl -X POST \
+    {{ request.host_url }}api/chat \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "prompt": "Hello, how are you?",
+        "model": "deepseek-r1"
+    }'
+        </pre>
+    </div>
+</body>
+</html>
