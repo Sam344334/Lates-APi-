@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import requests
 import os
@@ -15,6 +15,11 @@ API_KEY = os.environ.get('API_KEY')
 FAST_BASE_URL = 'https://fast.typegpt.net/v1/chat/completions'
 PUTER_BASE_URL = 'https://api.puter.com/chat'
 VALID_MODELS = ['deepseek-r1', 'gpt-4o', 'claude']
+
+# Add this new route for the home page
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('home.html', models=VALID_MODELS)
 
 def call_fast_typegpt(prompt, model):
     headers = {
