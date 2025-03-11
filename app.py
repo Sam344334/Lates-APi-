@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 CORS(app)
 
 # Configuration
@@ -46,12 +46,18 @@ def call_puter_ai(prompt, model):
     except requests.RequestException as e:
         return {'success': False, 'error': str(e)}
 
-@app.route('/health', methods=['GET'])
-def health_check():
-    return jsonify({'status': 'healthy'}), 200
+@app.route('/', methods=['GET'])
+def home():
+    try:
+        return render_template('home.html', models=VALID_MODELS)
+    except Exception as e:
+        return str(e), 500
 
-@app.route('/api/chat', methods=['POST'])
+@app.route('/api/chat', methods=['POST', 'OPTIONS'])
 def chat():
+    if request.method == 'OPTIONS':
+        return '', 200
+    
     try:
         data = request.get_json()
         if not data:
@@ -79,6 +85,11 @@ def chat():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# Add a test route
+@app.route('/test')
+def test():
+    return "API is working"
+
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 10000))
-    app.run(host='0.0.0.0', port=port, workers=4)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
